@@ -1,5 +1,37 @@
 # Hackaton Techtonic JAMA
  
+ Summary : 
+The goal of this application is to help the user in his thinking process in order to allow him to get the best result out of the information currently at his disposal. 
+To do that, we used a popular methodology for resolving problems, popularized by the blog “Farhnam Street”, “Shane Perrish” and “Charlie Munger”
+
+This framework follows the following steps, that are incentivized by the agent : 
+Define the problem
+Is this problem the root problem ?
+What is the goal we’re looking for ?
+What are the obstacles ? 
+Explore the possible solutions 
+What is going to happen in the best case scenario and the worst case scenario ? Are the unwanted results fixable ? 
+What will this solution result in the long run ? 
+Is it possible to choose multiples solutions at the same time ? 
+What would you do if this solution wasn’t possible ? 
+Evaluate the options 
+Is this information coming from a verified authority (Official document from the company ? Who is the author ?) 
+What is the cost of opportunity for this solution ? 
+Considering the pros and cons, what is the most convenient solution ? 
+Security Margin 
+
+Learn from these decisions 
+Give a feedback to the database that will be taken into consideration for the next decisions. 
+
+How to run it 
+Interact with the conversational agent
+
+
+What wasn’t implemented ? 
+Online research 
+Possibility to add files 
+Implementention of the report for the future decisions
+ 
 ## instructions données
 ### [Aikido]
 10% de la note vient de à quel point le projet est sécure
