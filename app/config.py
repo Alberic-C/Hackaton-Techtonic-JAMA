@@ -9,7 +9,9 @@ class Settings(BaseSettings):
     database_url: str = "sqlite:///./sophia.db"
 
     gemini_api_key: str = ""
-    gemini_model: str = "gemini-2.5-flash"
+    gemini_model: str = "gemini-3.6-flash"
+    # Modèles de repli (séparés par des virgules) si le principal renvoie 429/5xx de façon persistante.
+    gemini_fallback_models: str = "gemini-3.6-flash,gemini-flash-lite-latest"
     embedding_model: str = "gemini-embedding-001"
     embedding_dim: int = 768
 
@@ -24,6 +26,11 @@ class Settings(BaseSettings):
     feedback_reliability: int = 85  # score attribué aux leçons issues des reviews
 
     max_history_messages: int = 30
+
+    @property
+    def gemini_model_chain(self) -> list[str]:
+        extra = [m.strip() for m in self.gemini_fallback_models.split(",") if m.strip()]
+        return [self.gemini_model, *[m for m in extra if m != self.gemini_model]]
 
 
 @lru_cache

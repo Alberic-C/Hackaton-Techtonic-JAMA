@@ -17,6 +17,10 @@ class LLMError(RuntimeError):
     pass
 
 
+class LLMUnavailable(LLMError):
+    """Service surchargé / indisponible (429, 5xx) après retries : un modèle de repli peut aider."""
+
+
 class ChatTurn(BaseModel):
     role: Literal["user", "model"]
     text: str
@@ -40,16 +44,18 @@ class GeminiClient:
         self._client = genai.Client(api_key=settings.gemini_api_key)
 
     # -- robustesse réseau ---------------------------------------------------
-    def _call(self, fn: Callable, attempts: int = 3):
+    def _call(self, fn: Callable, attempts: int = 2):
         from google.genai import errors
 
         for i in range(attempts):
             try:
                 return fn()
             except errors.APIError as e:
-                if e.code in RETRYABLE and i < attempts - 1:
-                    time.sleep(2**i)
-                    continue
+                if e.code in RETRYABLE:
+                    if i < attempts - 1:
+                        time.sleep(2**i)
+                        continue
+                    raise LLMUnavailable(f"Gemini surchargé ({e.code}), réessaie dans un instant") from e
                 raise LLMError(f"Erreur API Gemini ({e.code})") from e
             except Exception as e:  # réseau, timeout...
                 raise LLMError("Appel Gemini impossible") from e
@@ -82,18 +88,27 @@ class GeminiClient:
         contents = [
             types.Content(role=t.role, parts=[types.Part.from_text(text=t.text)]) for t in turns
         ]
-        resp = self._call(
-            lambda: self._client.models.generate_content(
-                model=self._s.gemini_model,
-                contents=contents,
-                config=types.GenerateContentConfig(
-                    system_instruction=system,
-                    response_mime_type="application/json",
-                    response_schema=schema,
-                    temperature=0.4,
-                ),
-            )
-        )
+        resp = None
+        last: LLMUnavailable | None = None
+        for model in self._s.gemini_model_chain:  # repli automatique si le modèle est surchargé
+            try:
+                resp = self._call(
+                    lambda m=model: self._client.models.generate_content(
+                        model=m,
+                        contents=contents,
+                        config=types.GenerateContentConfig(
+                            system_instruction=system,
+                            response_mime_type="application/json",
+                            response_schema=schema,
+                            temperature=0.4,
+                        ),
+                    )
+                )
+                break
+            except LLMUnavailable as e:
+                last = e
+        if resp is None:
+            raise last or LLMError("Aucun modèle Gemini disponible")
         try:
             if isinstance(resp.parsed, schema):
                 return resp.parsed
