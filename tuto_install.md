@@ -14,7 +14,6 @@ cp .env.example .env               # Windows: copy .env.example .env
 Edit .env and set at least:
 
 GEMINI_API_KEY=your_gemini_key
-WEBHOOK_API_KEY=any_long_random_string   # generate: python -c "import secrets;print(secrets.token_urlsafe(32))"
 # 4. Start the server
 uvicorn app.main:app --reload
 Open http://127.0.0.1:8000 for the UI, or http://127.0.0.1:8000/docs for the API docs.
@@ -26,7 +25,8 @@ curl -X POST http://127.0.0.1:8000/webhooks/n8n/documents \
      -H "X-API-Key: <your WEBHOOK_API_KEY>" -H "Content-Type: application/json" \
      -d @scripts/sample_n8n_payload.json
 Run the tests (no API key needed, Gemini is mocked): pytest
-Troubleshooting
+
+## Troubleshooting
 
 Error 503: Google's models are temporarily overloaded. The app retries and falls back to other models automatically. Wait a few seconds and resend.
 Error 404 on a model: some models are not available to new accounts. Change GEMINI_MODEL in .env (for example to gemini-3.6-flash).
