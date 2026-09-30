@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sophia — aide à la décision</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <aside id="sidebar">
+    <h1>Sophia</h1>
+    <button id="new-session">+ Nouvelle décision</button>
+    <h2>Décisions</h2>
+    <ul id="session-list"></ul>
+  </aside>
+
+  <main>
+    <ol id="stepper"></ol>
+    <div id="chat"></div>
+    <div id="guard"></div>
+    <form id="composer">
+      <textarea id="input" rows="2" maxlength="8000" placeholder="Décris ta situation…"></textarea>
+      <button type="submit" id="send">Envoyer</button>
+      <button type="button" id="advance">Étape suivante →</button>
+    </form>
+    <form id="review-form" hidden>
+      <h3>Étape 5 — Rapport d'évaluation</h3>
+      <p>Tu reviens après avoir appliqué ta décision ? Raconte ce qui s'est passé.</p>
+      <select id="outcome">
+        <option value="success">Succès</option>
+        <option value="partial">Mitigé</option>
+        <option value="failure">Échec</option>
+      </select>
+      <textarea id="report" rows="4" minlength="20" maxlength="10000" required
+                placeholder="Résultats, écarts avec les scénarios prévus, ce que tu referais…"></textarea>
+      <button type="submit">Envoyer le rapport</button>
+    </form>
+  </main>
+
+  <aside id="panel">
+    <h2>État de la décision</h2>
+    <div id="state"></div>
+    <h2>Sources (RAG)</h2>
+    <div id="sources"></div>
+  </aside>
+  <script src="/static/app.js"></script>
+</body>
+</html>

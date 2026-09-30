@@ -1,0 +1,13 @@
+{
+  "external_id": "gdrive:1A2b3C",
+  "title": "Post-mortem : hausse du churn Q1",
+  "text": "Le churn client est passé de 3% à 5% au T1. L'analyse montre que l'onboarding dure 6 semaines en moyenne, contre 2 semaines chez les concurrents. Un pilote d'onboarding guidé sur 40 clients a réduit le churn de 20% en 8 semaines.\n\nRisque identifié : la charge du support augmente pendant le pilote. Plan B : retour à l'onboarding standard si le NPS baisse de plus de 10 points.",
+  "metadata": {
+    "author": "Alice Martin",
+    "context": "Customer Success — post-mortem T1",
+    "date": "2026-04-02T09:30:00Z",
+    "source_url": "https://intranet.example.com/postmortems/q1",
+    "tags": ["churn", "onboarding"]
+  },
+  "reliability_score": 95
+}
